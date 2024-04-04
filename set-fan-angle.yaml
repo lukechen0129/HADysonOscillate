@@ -1,0 +1,70 @@
+alias: Set Fan angle
+description: ''
+trigger:
+    - platform: state
+      entity_id:
+          - input_number.dyson_angle
+condition: []
+action:
+    - if:
+          - condition: state
+            entity_id: input_select.dyson_oscillating
+            state: '0'
+      then:
+          - service: dyson_local.set_angle
+            data:
+                entity_id: fan.bedroom
+                angle_high: "{{ states('input_number.dyson_angle') }}"
+                angle_low: "{{ states('input_number.dyson_angle') }}"
+      else:
+          - if:
+                - condition: template
+                  value_template: >-
+                      {{ int(states('input_number.dyson_angle')) -
+                      int(states('input_select.dyson_oscillating')) / 2 | round(0) < 5}}
+            then:
+                - service: dyson_local.set_angle
+                  data:
+                      entity_id: fan.bedroom
+                      angle_high: "{{ 5 + int(states('input_select.dyson_oscillating')) }}"
+                      angle_low: '5'
+                - service: input_number.set_value
+                  target:
+                      entity_id: input_number.dyson_angle
+                  data:
+                      value: >-
+                          {{ 6 + (int(states('input_select.dyson_oscillating')) / 2 |
+                          round(0) ) | round(0) }}
+            else:
+                - if:
+                      - condition: template
+                        value_template: >-
+                            {{ int(states('input_number.dyson_angle')) +
+                            int(states('input_select.dyson_oscillating')) / 2 | round(0) >
+                            355}}
+                  then:
+                      - service: dyson_local.set_angle
+                        data:
+                            entity_id: fan.bedroom
+                            angle_high: 354
+                            angle_low: "{{ 354 - int(states('input_select.dyson_oscillating')) }}"
+                      - service: input_number.set_value
+                        target:
+                            entity_id: input_number.dyson_angle
+                        data:
+                            value: >-
+                                {{ 354 - (int(states('input_select.dyson_oscillating')) / 2
+                                | round(0) ) | round(0) }}
+                  else:
+                      - service: dyson_local.set_angle
+                        data:
+                            entity_id: fan.bedroom
+                            angle_high: >-
+                                {{ int(states('input_number.dyson_angle')) +
+                                ((int(states('input_select.dyson_oscillating')) / 2) |
+                                round(0)) }}
+                            angle_low: >-
+                                {{ int(states('input_number.dyson_angle')) -
+                                ((int(states('input_select.dyson_oscillating')) / 2) |
+                                round(0)) }}
+mode: single
