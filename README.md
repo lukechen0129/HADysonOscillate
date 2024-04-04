@@ -11,12 +11,13 @@ Create some helpers in Home Assistant:
     -   Called `input_number.dyson_angle` in example code
 -   An `Input Select` to handle Fan oscillating range
     -   Set options that you would like to use (Don't have to match the preset Dyson provided on their app)
+    -   Make sure there is option `0` in the list
     -   Called `input_select.dyson_oscillating` in example code
 
 ## Propose of automations
 
-`Set Fan Angle` - Apply angle change to fan
-`Set Oscillating & Angle` - Apply oscillating range to fan & update angle accordingly
+-   `Set Fan Angle` - Apply angle change to fan
+-   `Set Oscillating & Angle` - Apply oscillating range to fan & update angle accordingly
 
 ## Additional
 
