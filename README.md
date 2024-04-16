@@ -14,7 +14,7 @@ Create some helpers in Home Assistant:
     -   Make sure there is option `0` in the list
     -   Called `input_select.dyson_oscillating` in example code
 
-## Propose of automations
+## Purpose of automations
 
 -   `Set Fan Angle` - Apply angle change to fan
 -   `Set Oscillating & Angle` - Apply oscillating range to fan & update angle accordingly
